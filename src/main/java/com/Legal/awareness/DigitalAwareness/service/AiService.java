@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class AiService {
     private final WebClient webClient;
-    private final String API_KEY="AIzaSyCuVHAylNPZZ3N92Ykb1ZaTI6B8zj9nh6E";
+    private final String API_KEY="";
 
     public AiService() {
         this.webClient= WebClient.builder().baseUrl("https://generativelanguage.googleapis.com").build();
