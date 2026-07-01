@@ -1,4 +1,4 @@
-package com.Legal.awareness.DigitalAwareness.entity;
+package com.Legal.awareness.DigitalAwareness.chat.entity;
 
 public class reply {
     private String reply;
