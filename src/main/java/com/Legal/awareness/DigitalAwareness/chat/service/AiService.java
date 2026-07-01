@@ -1,9 +1,9 @@
-package com.Legal.awareness.DigitalAwareness.service;
+package com.Legal.awareness.DigitalAwareness.chat.service;
 
-import com.Legal.awareness.DigitalAwareness.entity.Content;
-import com.Legal.awareness.DigitalAwareness.entity.GeminiRequest;
-import com.Legal.awareness.DigitalAwareness.entity.GeminiResponse;
-import com.Legal.awareness.DigitalAwareness.entity.Part;
+import com.Legal.awareness.DigitalAwareness.chat.entity.Content;
+import com.Legal.awareness.DigitalAwareness.chat.entity.GeminiRequest;
+import com.Legal.awareness.DigitalAwareness.chat.entity.GeminiResponse;
+import com.Legal.awareness.DigitalAwareness.chat.entity.Part;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,6 +13,9 @@ import java.util.List;
 @Service
 public class AiService {
     private final WebClient webClient;
+
+
+
     private final String API_KEY="";
 
     public AiService() {
