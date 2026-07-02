@@ -10,6 +10,7 @@ import com.Legal.awareness.DigitalAwareness.user.entity.User;
 import com.Legal.awareness.DigitalAwareness.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,7 @@ public class AuthService {
 
         if(byEmail.isEmpty()){
             User user = User.builder()
+                    .username(registerUser.getUsername())
                     .name(registerUser.getName())
                     .email(registerUser.getEmail())
                     .password(passwordEncoder.encode(registerUser.getPassword()))
@@ -64,13 +66,18 @@ public class AuthService {
 
     public LoginResponse login(LoginDto loginDto){
 
+        // This is the first authenticate user otherwise anyone can generate a token if they knows a register email
+        authentication.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDto.getEmail(),
+                        loginDto.getPassword()
+                )
+        );
+
         User user = userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
 
-//        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-//            throw new InvalidCredentialsException("Invalid email or password");
-//        }
 
         log.info("Login Request Service   : {}", loginDto);
         String token = jwtService.generateToken(user);
