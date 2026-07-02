@@ -5,6 +5,7 @@ import com.Legal.awareness.DigitalAwareness.auth.utilites.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true,nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private String name;
@@ -50,6 +54,10 @@ public class User implements UserDetails {
 
     private LocalDateTime updatedAt;
 
+    private boolean deleted = false;
+
+    private LocalDateTime deletedAt;
+
     @PrePersist
     public void onCreate() {
         createdAt = LocalDateTime.now();
@@ -63,7 +71,14 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(
+                new SimpleGrantedAuthority("ROLE_" + role.name())
+        );
+    }
+
+
+    public String displayUsername(){
+        return username;
     }
 
     @Override
@@ -73,17 +88,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
+    @Override
+    public boolean isEnabled() {
+        return Boolean.TRUE.equals(isVerified);
+    }
 }
