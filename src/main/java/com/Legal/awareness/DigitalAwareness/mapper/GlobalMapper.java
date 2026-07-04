@@ -3,9 +3,14 @@ package com.Legal.awareness.DigitalAwareness.mapper;
 
 import com.Legal.awareness.DigitalAwareness.auth.dto.LoginResponse;
 import com.Legal.awareness.DigitalAwareness.auth.dto.UserResponse;
+import com.Legal.awareness.DigitalAwareness.category.dto.CategoryResponse;
+import com.Legal.awareness.DigitalAwareness.category.entity.Category;
 import com.Legal.awareness.DigitalAwareness.user.dto.PublicUserResponse;
 import com.Legal.awareness.DigitalAwareness.user.entity.User;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class GlobalMapper {
@@ -42,4 +47,29 @@ public class GlobalMapper {
                 .build();
     }
 
+    public CategoryResponse toCategoryResponse(Category category){
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .description(category.getDescription())
+                .active(category.isActive())
+                .build();
+    }
+
+    public List<CategoryResponse> getAllCategories(List<Category> categories){
+        // we'll get all categories from db in the form of Category, and we need to convert each category into categoryResponse
+
+        List<CategoryResponse> convertIntoCategoryResponse = categories.stream()
+                .map(category -> (
+                        CategoryResponse.builder()
+                                .id(category.getId())
+                                .name(category.getName())
+                                .description(category.getDescription())
+                                .active(category.isActive())
+                                .build()
+                ))
+                .collect(Collectors.toList());
+
+        return convertIntoCategoryResponse;
+    }
 }
