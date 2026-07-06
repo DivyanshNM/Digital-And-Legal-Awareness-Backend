@@ -3,10 +3,14 @@ package com.Legal.awareness.DigitalAwareness.mapper;
 
 import com.Legal.awareness.DigitalAwareness.auth.dto.LoginResponse;
 import com.Legal.awareness.DigitalAwareness.auth.dto.UserResponse;
+import com.Legal.awareness.DigitalAwareness.blog.dto.BlogResponse;
+import com.Legal.awareness.DigitalAwareness.blog.entity.Blog;
 import com.Legal.awareness.DigitalAwareness.category.dto.CategoryResponse;
 import com.Legal.awareness.DigitalAwareness.category.entity.Category;
 import com.Legal.awareness.DigitalAwareness.user.dto.PublicUserResponse;
 import com.Legal.awareness.DigitalAwareness.user.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,7 +20,7 @@ import java.util.stream.Collectors;
 public class GlobalMapper {
 
 
-    public UserResponse toUserResponse(User user){
+    public UserResponse toUserResponse(User user) {
         return UserResponse.builder()
                 .username(user.displayUsername())
                 .name(user.getName())
@@ -27,7 +31,7 @@ public class GlobalMapper {
                 .build();
     }
 
-    public LoginResponse toLoginResponse(User user , String token){
+    public LoginResponse toLoginResponse(User user, String token) {
         return LoginResponse.builder()
                 .token(token)
                 .username(user.displayUsername())
@@ -37,7 +41,7 @@ public class GlobalMapper {
                 .build();
     }
 
-    public PublicUserResponse  toPublicUserResponse(User user){
+    public PublicUserResponse toPublicUserResponse(User user) {
         return PublicUserResponse.builder()
                 .username(user.displayUsername())
                 .name(user.getName())
@@ -47,7 +51,7 @@ public class GlobalMapper {
                 .build();
     }
 
-    public CategoryResponse toCategoryResponse(Category category){
+    public CategoryResponse toCategoryResponse(Category category) {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .name(category.getName())
@@ -56,7 +60,7 @@ public class GlobalMapper {
                 .build();
     }
 
-    public List<CategoryResponse> getAllCategories(List<Category> categories){
+    public List<CategoryResponse> getAllCategories(List<Category> categories) {
         // we'll get all categories from db in the form of Category, and we need to convert each category into categoryResponse
 
         List<CategoryResponse> convertIntoCategoryResponse = categories.stream()
@@ -72,4 +76,38 @@ public class GlobalMapper {
 
         return convertIntoCategoryResponse;
     }
+
+    public BlogResponse toBlogResponse(Blog blog) {
+        return BlogResponse.builder()
+                .id(blog.getId())
+                .title(blog.getTitle())
+                .content(blog.getContent())
+                .views(blog.getViewCount())
+                .status(blog.getStatus())
+                .category(blog.getCategory().getName())
+                .author(blog.getAuthor().getName())
+                .publishedAt(blog.getPublishedAt())
+                .build();
+    }
+
+    public List<BlogResponse> toBlogResponses(List<Blog> blogs) {
+        List<BlogResponse> listOfBlogResponse = blogs.stream()
+                .map(blog -> (
+                        BlogResponse.builder()
+                                .id(blog.getId())
+                                .title(blog.getTitle())
+                                .content(blog.getContent())
+                                .views(blog.getViewCount())
+                                .status(blog.getStatus())
+                                .category(blog.getCategory().getName())
+                                .author(blog.getAuthor().getName())
+                                .publishedAt(blog.getPublishedAt())
+                                .build()
+                ))
+                .collect(Collectors.toList());
+        return listOfBlogResponse;
+    }
+
+
+
 }

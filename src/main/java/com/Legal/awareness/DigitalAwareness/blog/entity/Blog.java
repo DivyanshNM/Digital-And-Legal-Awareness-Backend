@@ -30,10 +30,15 @@ public class Blog {
     @Column(nullable = false)
     private String content;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private BlogStatus status;
+    private BlogStatus status = BlogStatus.DRAFT;
 
+    @Builder.Default
     private Long viewCount = 0L;
+
+    @Builder.Default
+    private boolean active = true;
 
     private LocalDateTime publishedAt;
 
