@@ -5,6 +5,7 @@ import com.Legal.awareness.DigitalAwareness.category.dto.CreateCategoryRequest;
 import com.Legal.awareness.DigitalAwareness.category.dto.DeleteMessage;
 import com.Legal.awareness.DigitalAwareness.category.dto.UpdateCategoryRequest;
 import com.Legal.awareness.DigitalAwareness.category.services.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Categories APIs" , description = "Categories related Apis to manage category By ADMIN")
 @RestController
 @RequestMapping("api/v1/categories")
 public class CategoryController {

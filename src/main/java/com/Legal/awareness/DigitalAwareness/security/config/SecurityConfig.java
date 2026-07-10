@@ -21,7 +21,7 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final CustomUserService customUserService;
 
-    public SecurityConfig(JwtFilter jwtFilter , CustomUserService customUserService) {
+    public SecurityConfig(JwtFilter jwtFilter, CustomUserService customUserService) {
         this.jwtFilter = jwtFilter;
         this.customUserService = customUserService;
     }
@@ -32,35 +32,37 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config){
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
 
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(customUserService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/v1/auth/**",
-                                        "/api/v1/user/public/").permitAll()
+                                        "/api/v1/user/health-check",
+                                        "/api/v1/user/public/{username}").permitAll()
+                                .requestMatchers("/swagger-ui/**",
+                                        "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated())
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtFilter ,  UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 
 
 }
