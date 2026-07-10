@@ -7,6 +7,7 @@ import com.Legal.awareness.DigitalAwareness.blog.dto.DeleteResponse;
 import com.Legal.awareness.DigitalAwareness.blog.dto.UpdateBlogRequest;
 import com.Legal.awareness.DigitalAwareness.blog.service.BlogService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/blogs")
+@Slf4j
 public class BlogController {
 
 
@@ -27,10 +29,12 @@ public class BlogController {
 
     @PostMapping
     public ResponseEntity<BlogResponse> createBlog(@Valid @RequestBody CreateBlog createBlog) {
+        log.info("Request to create blog: {}", createBlog);
         BlogResponse blogResponse = blogService.saveBlog(createBlog);
+
+        log.info("blogResponse: {}", blogResponse);
         return new ResponseEntity<>(blogResponse, HttpStatus.CREATED);
     }
-
     @PatchMapping("/{blogId}/publish")
     public ResponseEntity<BlogResponse> publishBlog(@PathVariable Long blogId) {
         BlogResponse blogResponse = blogService.publishBlog(blogId);

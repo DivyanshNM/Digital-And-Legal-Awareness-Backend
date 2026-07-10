@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SlungConfig {
 
+
+
     @Bean
     public Slugify  slugify() {
         return Slugify.builder()
@@ -14,4 +16,6 @@ public class SlungConfig {
                 .transliterator(true)
                 .build();
     }
+
+
 }
