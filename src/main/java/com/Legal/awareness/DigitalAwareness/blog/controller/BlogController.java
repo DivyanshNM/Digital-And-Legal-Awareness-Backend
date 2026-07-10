@@ -66,8 +66,8 @@ public class BlogController {
     @GetMapping("/search")
     public ResponseEntity<Page<BlogResponse>> searchBlogs(
             @RequestParam("keyword") String keyword,
-            @RequestParam("page") int page,
-            @RequestParam("size") int size
+            @RequestParam(value = "page" , defaultValue = "0") int page,
+            @RequestParam(value = "size" , defaultValue = "10") int size
     ){
         Page<BlogResponse> blogResponses = blogService.searchBlog(keyword, page, size);
         return ResponseEntity.ok(blogResponses);
@@ -78,8 +78,8 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getBlogByAuthor(id));
     }
 
-    @GetMapping("/category/{id}")
-    public ResponseEntity<List<BlogResponse>> getBlogByCategoryId(@PathVariable("id") Long categoryId) {
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<BlogResponse>> getBlogByCategoryId(@PathVariable Long categoryId) {
         return ResponseEntity.ok(blogService.getBlogByCategoryId(categoryId));
     }
 
