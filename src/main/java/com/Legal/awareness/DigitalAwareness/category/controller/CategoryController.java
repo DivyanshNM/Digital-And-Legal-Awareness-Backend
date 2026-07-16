@@ -5,6 +5,10 @@ import com.Legal.awareness.DigitalAwareness.category.dto.CreateCategoryRequest;
 import com.Legal.awareness.DigitalAwareness.category.dto.DeleteMessage;
 import com.Legal.awareness.DigitalAwareness.category.dto.UpdateCategoryRequest;
 import com.Legal.awareness.DigitalAwareness.category.services.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,12 +29,21 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+
+    @Operation(
+            summary = "Create Category By Admin",
+            description = "Create Category ex : Java , Spring , Spring Boot"
+    )
+    @ApiResponse(responseCode = "201" , description = "Category Created Successfully",
+            content = @Content(schema = @Schema(implementation = CategoryResponse.class)))
+    @ApiResponse(responseCode = "403" , description = "You are not Authorized to access it only ADMIN can access")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CreateCategoryRequest createCategoryRequest) {
         CategoryResponse category = categoryService.createCategory(createCategoryRequest);
         return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
+
 
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
