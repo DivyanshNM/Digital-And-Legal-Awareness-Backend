@@ -15,6 +15,8 @@ public class BlogResponse {
 
     private String title;
 
+    private String slug;
+
     private String content;
 
     private String category;
