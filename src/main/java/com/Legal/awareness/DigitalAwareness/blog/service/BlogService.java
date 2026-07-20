@@ -50,13 +50,13 @@ public class BlogService {
     public BlogResponse saveBlog(CreateBlog createBlog) {
 
         String generatedSlugTitle = slugService.generateSlugTitle(createBlog.getTitle());
-        String finalSlug = generatedSlugTitle;
-        int count = 1;
-        while (blogRepository.existsBySlug(finalSlug)) {
-            finalSlug = generatedSlugTitle + "-" + count;
-            count++;
-        }
-
+        User user=getCurrentUser();
+        String finalSlug = user.getId() + generatedSlugTitle;
+//        int count = 1;
+//        while (blogRepository.existsBySlug(finalSlug)) {
+//            finalSlug = generatedSlugTitle + "-" + count;
+//            count++;
+//        }
         Category category = categoryRepository.findByIdAndActiveTrue(createBlog.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
