@@ -33,30 +33,32 @@ public class BlogService {
     private final SlugService slugService;
     private final CategoryRepository categoryRepository;
     private final GlobalMapper globalMapper;
+    private final BlogClassificationService blogClassificationService;
 
     public BlogService(
             BlogRepository blogRepository,
             SlugService slugService,
             CategoryRepository categoryRepository,
-            GlobalMapper globalMapper
+            GlobalMapper globalMapper,
+            BlogClassificationService blogClassificationService
     ) {
         this.blogRepository = blogRepository;
         this.slugService = slugService;
         this.categoryRepository = categoryRepository;
         this.globalMapper = globalMapper;
+        this.blogClassificationService=blogClassificationService;
     }
 
     @Transactional
     public BlogResponse saveBlog(CreateBlog createBlog) {
-
+        boolean legal=blogClassificationService.classify(createBlog);
+        if(!legal){
+            throw new RuntimeException("Only legal blogs are allowed.");
+        }
         String generatedSlugTitle = slugService.generateSlugTitle(createBlog.getTitle());
         User user=getCurrentUser();
         String finalSlug = user.getId() + generatedSlugTitle;
-//        int count = 1;
-//        while (blogRepository.existsBySlug(finalSlug)) {
-//            finalSlug = generatedSlugTitle + "-" + count;
-//            count++;
-//        }
+
         Category category = categoryRepository.findByIdAndActiveTrue(createBlog.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
